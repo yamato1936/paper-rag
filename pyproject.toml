@@ -1,0 +1,23 @@
+[project]
+name = "paper-rag-gemini"
+version = "0.1.0"
+description = "Minimal RAG search chatbot for papers and technical PDFs using Gemini API."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+    "python-multipart>=0.0.9",
+    "google-genai>=0.8.0",
+    "pymupdf>=1.24.0",
+    "faiss-cpu>=1.8.0",
+    "numpy>=1.26.0",
+    "pydantic>=2.7.0",
+    "streamlit>=1.36.0",
+    "requests>=2.32.0",
+    "pytest>=8.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

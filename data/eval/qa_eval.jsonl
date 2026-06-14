@@ -1,0 +1,10 @@
+{"question":"提案手法は何ですか？","gold_pages":[2,3],"gold_keywords":["method","architecture"]}
+{"question":"実験データセットは何ですか？","gold_pages":[5],"gold_keywords":["dataset","benchmark"]}
+{"question":"主な貢献は何ですか？","gold_pages":[1,2],"gold_keywords":["contribution","proposed"]}
+{"question":"評価指標は何ですか？","gold_pages":[6],"gold_keywords":["metric","accuracy"]}
+{"question":"関連研究との差分は何ですか？","gold_pages":[3,4],"gold_keywords":["related work","baseline"]}
+{"question":"モデル構成は何ですか？","gold_pages":[2],"gold_keywords":["model","architecture"]}
+{"question":"実験結果の結論は何ですか？","gold_pages":[7,8],"gold_keywords":["result","performance"]}
+{"question":"制限事項は何ですか？","gold_pages":[9],"gold_keywords":["limitation","future"]}
+{"question":"使用したベンチマークは何ですか？","gold_pages":[5],"gold_keywords":["benchmark","dataset"]}
+{"question":"今後の課題は何ですか？","gold_pages":[9,10],"gold_keywords":["future work","limitation"]}
