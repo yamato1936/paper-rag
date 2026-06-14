@@ -1,39 +1,39 @@
 # Paper RAG with Gemini
 
-## Overview
+## 概要
 PDF論文・技術資料を対象にしたRAG検索チャットボットです。
-PDFをアップロードすると、本文を抽出し、chunking、embedding、vector searchを行い、Gemini APIが根拠付きで回答します。
+PDFをアップロードすると、本文を抽出し、チャンク分割、埋め込み生成、ベクトル検索を行い、Gemini APIが根拠付きで回答します。
 
-## Background
-LLMは長文PDFをそのまま扱うと、根拠不明な回答やhallucinationが発生しやすいです。
+## 背景
+LLMは長文PDFをそのまま扱うと、根拠不明な回答やハルシネーションが発生しやすいです。
 本プロジェクトではRAG構成により、検索された文脈に基づく回答生成を実装しました。
 
-## My Role
+## 担当範囲
 - 要件定義
 - RAGアーキテクチャ設計
-- PDF parser実装
-- chunking実装
-- embedding生成
-- FAISS vector search実装
+- PDFパーサー実装
+- チャンク分割実装
+- 埋め込み生成
+- FAISSベクトル検索実装
 - Gemini API連携
-- FastAPI backend実装
+- FastAPIバックエンド実装
 - Streamlit UI実装
 - 評価スクリプト作成
 - README・技術資料作成
 
-## Architecture
-PDF Upload
-→ Text Extraction
-→ Chunking
-→ Embedding
-→ FAISS Index
-→ Query Embedding
-→ Top-k Retrieval
-→ Prompt Construction
+## アーキテクチャ
+PDFアップロード
+→ テキスト抽出
+→ チャンク分割
+→ 埋め込み生成
+→ FAISSインデックス
+→ クエリ埋め込み生成
+→ Top-k検索
+→ プロンプト構築
 → Gemini API
-→ Answer with Citations
+→ 引用付き回答
 
-## Tech Stack
+## 技術スタック
 - Python
 - FastAPI
 - Streamlit
@@ -43,26 +43,26 @@ PDF Upload
 - Pydantic
 - pytest
 
-## Environment Variables
-This project does not use `.env`.
-Set environment variables directly in your shell or deployment environment.
+## 環境変数
+このプロジェクトでは`.env`を使用しません。
+環境変数はシェルまたはデプロイ環境で直接設定してください。
 
 ```bash
 export GEMINI_API_KEY="your_api_key"
 export GEMINI_MODEL="gemini-2.5-flash"
 ```
 
-`GEMINI_MODEL` is optional. When it is not set, the app uses `gemini-2.5-flash`.
-The Gemini API key is never printed by the app.
+`GEMINI_MODEL`は任意です。未設定の場合、アプリは`gemini-2.5-flash`を使用します。
+Gemini APIキーがアプリから出力されることはありません。
 
-## How to Run
-Install dependencies:
+## 実行方法
+依存関係をインストールします。
 
 ```bash
 uv sync
 ```
 
-Or, if you prefer pip:
+pipを使う場合は、次の手順でインストールします。
 
 ```bash
 python3 -m venv .venv
@@ -70,7 +70,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Start the FastAPI backend in terminal 1:
+ターミナル1でFastAPIバックエンドを起動します。
 
 ```bash
 export GEMINI_API_KEY="your_api_key"
@@ -78,7 +78,7 @@ export GEMINI_MODEL="gemini-2.5-flash"
 bash scripts/run_api.sh
 ```
 
-Open a second terminal and start the Streamlit UI:
+ターミナル2でStreamlit UIを起動します。
 
 ```bash
 cd ~/paper-rag
@@ -88,18 +88,18 @@ export GEMINI_MODEL="gemini-2.5-flash"
 bash scripts/run_ui.sh
 ```
 
-Then open `http://localhost:8501` in your browser.
-The API docs are available at `http://localhost:8000/docs`.
+ブラウザで`http://localhost:8501`を開きます。
+APIドキュメントは`http://localhost:8000/docs`で確認できます。
 
 ## API
-### Upload PDF
+### PDFアップロード
 `POST /documents/upload`
 
-Multipart form field:
+multipart/form-dataのフィールド:
 
-- `file`: PDF file
+- `file`: PDFファイル
 
-Example response:
+レスポンス例:
 
 ```json
 {
@@ -110,7 +110,7 @@ Example response:
 }
 ```
 
-### Ask Question
+### 質問
 `POST /query`
 
 ```json
@@ -120,52 +120,52 @@ Example response:
 }
 ```
 
-### Health Check
+### ヘルスチェック
 `GET /health`
 
-## Evaluation
+## 評価
 ```bash
 python scripts/evaluate.py
 ```
 
-The evaluation data lives in `data/eval/qa_eval.jsonl`.
-The script reports Recall@5, Page Hit Rate, and Keyword Hit Rate.
-Because the current vector store is in memory, pass a PDF when running evaluation as a standalone command:
+評価データは`data/eval/qa_eval.jsonl`にあります。
+スクリプトはRecall@5、Page Hit Rate、Keyword Hit Rateを出力します。
+現在のベクトルストアはオンメモリ実装のため、単独コマンドとして評価を実行する場合はPDFを指定してください。
 
 ```bash
 python scripts/evaluate.py --pdf path/to/sample.pdf
 ```
 
-## Tests
+## テスト
 ```bash
 pytest
 ```
 
-Tests do not require a real Gemini API key.
+テストに実際のGemini APIキーは不要です。
 
-## Challenges and Solutions
-Challenge 1: PDF text extraction noise
+## 課題と対応
+課題1: PDFテキスト抽出時のノイズ
 PDFから抽出したテキストには改行崩れや不要な空白が含まれていました。
-Solution: 連続改行、空白、空ページを除去する前処理を実装しました。
+対応: 連続改行、空白、空ページを除去する前処理を実装しました。
 
-Challenge 2: Chunk boundary problem
-固定長chunkでは文脈が途中で切れ、検索精度が下がる可能性がありました。
-Solution: chunk overlapを導入し、前後の文脈を保持しました。
+課題2: チャンク境界の問題
+固定長チャンクでは文脈が途中で切れ、検索精度が下がる可能性がありました。
+対応: チャンクのオーバーラップを導入し、前後の文脈を保持しました。
 
-Challenge 3: Hallucination
+課題3: ハルシネーション
 LLMが検索結果に存在しない情報を補完する可能性がありました。
-Solution: promptで「提供contextのみ使用」「不明なら判断不能と答える」「source citation必須」と制約しました。
+対応: プロンプトで「提供されたコンテキストのみ使用」「不明なら判断不能と答える」「出典引用必須」と制約しました。
 
-## Current Limitations
-- vector storeはオンメモリ実装
+## 現在の制約
+- ベクトルストアはオンメモリ実装
 - PDFレイアウトの完全復元は未対応
 - 表や図の理解は未対応
-- rerankerは未実装
+- リランカーは未実装
 
-## Future Work
-- FAISS index永続化
-- hybrid search
-- reranker追加
-- section-aware chunking
+## 今後の予定
+- FAISSインデックス永続化
+- ハイブリッド検索
+- リランカー追加
+- セクションを考慮したチャンク分割
 - 複数PDF対応
 - Docker対応

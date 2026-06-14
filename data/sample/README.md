@@ -1,4 +1,4 @@
-# Sample Data
+# サンプルデータ
 
-Place public, non-confidential sample PDFs here when demonstrating the app.
-Uploaded PDFs are stored under `data/uploads/` and are ignored by Git.
+アプリのデモで使用する、公開可能で機密情報を含まないサンプルPDFをここに配置します。
+アップロードされたPDFは`data/uploads/`に保存され、Gitの管理対象外です。
